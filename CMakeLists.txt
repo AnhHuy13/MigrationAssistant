@@ -19,6 +19,7 @@ set(PROJECT_SOURCES
         mainwindow.ui
         findDisk.cpp
         mount.cpp
+        findDisk.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -45,6 +46,7 @@ else()
             mainwindow.ui
             findDisk.cpp
             mount.cpp
+            findDisk.h
         )
     endif()
 endif()
@@ -52,7 +54,6 @@ endif()
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(BLKID REQUIRED blkid)
 
-# 2. Nối thư viện vào app của ông
 target_link_libraries(MigrationAssistance PRIVATE Qt5::Widgets ${BLKID_LIBRARIES})
 target_include_directories(MigrationAssistance PRIVATE ${BLKID_INCLUDE_DIRS})
 
