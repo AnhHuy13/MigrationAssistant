@@ -20,14 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
     model->appendRow(item1);
     model->appendRow(item2);*/
     ui->listView->setModel(model);
-    ui->listView->setGridSize(QSize(120,120));
+    ui->listView->setGridSize(QSize(180,160));
     ui->listView->setIconSize(QSize(60,60));
 
     findDisk *fd = new findDisk(this);
-    connect(fd, &findDisk::sentPartition, this, [this, model](QString name, QString type, QString label, long size){
-        qDebug() << "da nhan tin hieu slot!";
-        QString hienThi = "Tên: " + name + " | Nhãn: " + label;
-        QStandardItem *item = new QStandardItem(QIcon::fromTheme("drive-harddisk"), hienThi);
+    connect(fd, &findDisk::sentPartition, this, [this, model](QString name, QString type, QString label, double size, QString unit){
+        qDebug() << "recieved slot!";
+        QString showString = "Name: " + name + "\n Label: " + label + "\n Size: "+ QString::number(size)+unit;
+        QStandardItem *item = new QStandardItem(QIcon::fromTheme("drive-harddisk"), showString);
         model->appendRow(item);
     });
     fd->findDisk::ScanPartition();

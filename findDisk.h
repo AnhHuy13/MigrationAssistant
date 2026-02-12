@@ -13,7 +13,7 @@ public:
     void ScanPartition();
 
 signals:
-    void sentPartition(QString name, QString type, QString label, long size);
+    void sentPartition(QString name, QString type, QString label, double size, QString unit);
 };
 
 #endif

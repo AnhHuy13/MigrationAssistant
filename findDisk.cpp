@@ -1,39 +1,80 @@
 #include "findDisk.h"
-#include <blkid/blkid.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <QRegularExpression>
+#include <QProcess>
+#include <QString>
 #include <cstring>
-#include <QDebug>//
+#include <QDebug>
+#include <cmath>
 
 findDisk::findDisk(QObject *parent) : QObject(parent) {}
 
 void findDisk::ScanPartition() {
     qDebug() << "Run findDisk";
-    blkid_cache cache;
-    if (blkid_get_cache(&cache, NULL) < 0) {
-        qDebug() << "Cache error blkid!";
-        return;
-    };
+    QProcess process;
+    QString output;
+    process.start("lsblk", QStringList() << "-nlb" << "-o" << "NAME,FSTYPE,LABEL,SIZE"); //lsblk --nlb -o NAME,FSTYPE,LABEL,SIZE
+    if (!process.waitForFinished()) {
+        qDebug() << "Process failed to finish:" << process.errorString();
+    }
+    QByteArray standardOutput = process.readAllStandardOutput();
+    output = QString(standardOutput);
+    if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        qDebug() << "Process exited with errors";
+    }
+    QStringList lines = output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts);
+    for (const QString &line : lines){
+        if (line.isEmpty()){
+            continue;
+        }
+        if (line.contains("ntfs")){
+            qDebug() << "Has found the one";
+            line.split(QRegularExpression("\\s+"));
+            qDebug() << line;
+            QStringList parts = line.split(QRegularExpression("\\s+"),Qt::SkipEmptyParts);
+            qDebug() << parts;
 
-    blkid_probe_all(cache);
-    blkid_dev_iterate iter = blkid_dev_iterate_begin(cache);
-    blkid_dev dev;
+            QString labelShow;
+            qulonglong sizeShow;
 
-    while (blkid_dev_next(iter, &dev) == 0) {
-        const char *devName = blkid_dev_devname(dev);
-        int fd = open(devName, O_RDONLY);
-        if (fd != -1) {
-            long size = blkid_get_dev_size(fd);
-            close(fd);
-            const char *type = blkid_get_tag_value(cache, "TYPE", devName);
-
-            if (type && strstr(type, "ntfs")) {
-                const char *label = blkid_get_tag_value(cache, "LABEL", devName);
-                qDebug() << "Found: " << devName;
-                emit sentPartition(QString(devName), QString(type), label ? label : "No Label", size);
+            if (parts.size() == 4) {
+                labelShow = parts.at(2);
+                sizeShow = parts.at(3).toULongLong();
+            } else {
+                labelShow = "No label";
+                sizeShow = parts.at(2).toULongLong();
             }
+
+            double sizeRounding;
+            QString unit;
+
+            qulonglong tb = 1099511627776;
+            unsigned long gb = 1073741824;
+            float mb = 1048576;
+            float kb = 1024;
+            double size = static_cast<double>(sizeShow);
+
+            if (sizeShow >= tb) {
+                sizeRounding = std::round(size / tb * 100.0) / 100.0;
+                unit = " TB";
+            }
+            else if (sizeShow >= gb) {
+                sizeRounding = std::round(size / gb * 100.0) / 100.0;
+                unit = " GB";
+            }
+            else if (sizeShow >= mb) {
+                sizeRounding = std::round(size / mb * 100.0) / 100.0;
+                unit = " MB";
+            }
+            else if (sizeShow >= kb) {
+                sizeRounding = std::round(size / kb * 100.0) / 100.0;
+                unit = " KB";
+            }
+            else {
+                sizeRounding = (sizeShow);
+                unit = " B";
+            }
+
+            emit sentPartition("/dev/"+QString(parts.at(0)),QString(parts.at(1)),labelShow,sizeRounding,unit);
         }
     }
-    blkid_dev_iterate_end(iter);
-    blkid_put_cache(cache);
 }

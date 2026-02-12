@@ -23,7 +23,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-signals: void sendPartition(QString name ,QString type,QString label,qlonglong size);
+signals: void sendPartition(QString name ,QString type,QString label,qulonglong size);
 };
 
 #endif // MAINWINDOW_H
