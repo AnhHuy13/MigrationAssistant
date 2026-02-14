@@ -22,6 +22,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QString getWindowsIcon(const QString& winVer, int version);
 
 signals: void sendPartition(QString name ,QString type,QString label,qulonglong size);
 };

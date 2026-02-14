@@ -13,13 +13,15 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        findDisk.cpp
-        mount.cpp
-        findDisk.h
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+    findDisk.cpp
+    mount.cpp
+    findDisk.h
+    resources.qrc
+    mount.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -47,6 +49,9 @@ else()
             findDisk.cpp
             mount.cpp
             findDisk.h
+            resources.qrc
+            mount.h
+
         )
     endif()
 endif()

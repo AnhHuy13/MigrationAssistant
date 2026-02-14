@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/disk/diskWin7.png</file>
+        <file>assets/disk/diskWin81.png</file>
+        <file>assets/disk/diskWin8.png</file>
+        <file>assets/disk/diskWin10.png</file>
+        <file>assets/disk/diskWin11.png</file>
+        <file>assets/disk/drive-harddisk.svg</file>
+    </qresource>
+</RCC>

@@ -12,8 +12,11 @@ public:
 
     void ScanPartition();
 
+private:
+    QString getWinVer(const QString &devicePath);
+
 signals:
-    void sentPartition(QString name, QString type, QString label, double size, QString unit);
+    void sentPartition(QString name, QString type, QString label, double size, QString unit, QString Winver);
 };
 
 #endif
