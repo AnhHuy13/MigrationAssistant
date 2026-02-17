@@ -13,7 +13,6 @@ findDisk::findDisk(QObject *parent) : QObject(parent) {}
 QString findDisk::getWinVer(const QString &devicePath) {
     QString winVer = "Windows (NTFS)";
 
-    // 1. Mount ổ đĩa
     QProcess mountProc;
     mountProc.start("udisksctl", QStringList() << "mount" << "-b" << devicePath);
     mountProc.waitForFinished(3000);

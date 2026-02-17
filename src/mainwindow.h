@@ -1,7 +1,6 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
 #include <QMainWindow>
+#include "diskChoosePage.h"//
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,8 +22,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString getWindowsIcon(const QString& winVer, int version);
+    dcPage *m_dcPage;
 
 signals: void sendPartition(QString name ,QString type,QString label,qulonglong size);
 };
-
-#endif // MAINWINDOW_H

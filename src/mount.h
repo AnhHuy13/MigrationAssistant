@@ -1,6 +1,4 @@
-#ifndef MOUNTDISKS_H
-#define MOUNTDISKS_H
-
+#pragma once
 #include <QObject>
 #include <QString>
 
@@ -17,5 +15,3 @@ private:
     bool isUserRoot() const;
     bool isDirectoryBlacklisted(const QString &targetPath) const;
 };
-
-#endif // MOUNTDISKS_H

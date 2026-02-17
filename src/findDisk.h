@@ -1,5 +1,4 @@
-#ifndef FINDDISK_H
-#define FINDDISK_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -18,5 +17,3 @@ private:
 signals:
     void sentPartition(QString name, QString type, QString label, double size, QString unit, QString Winver);
 };
-
-#endif
