@@ -18,12 +18,13 @@ set(PROJECT_SOURCES
     src/mainwindow.cpp
     src/mainwindow.h
     pages/mainwindow.ui
-    src/findDisk.cpp
-    src/findDisk.h
-    src/mount.cpp
-    src/mount.h
+    src/findDisk/findDisk.cpp
+    src/findDisk/findDisk.h
+    src/mount/mount.cpp
+    src/mount/mount.h
     pages/diskchosePage/diskChoosePage.cpp
     pages/diskchosePage/diskChoosePage.h
+    
     resources.qrc
 )
 
@@ -33,11 +34,17 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
     )
 else()
-    add_executable(MigrationAssistance ${PROJECT_SOURCES})
+    add_executable(MigrationAssistance ${PROJECT_SOURCES}
+
+
+
+    )
 endif()
 
 target_include_directories(MigrationAssistance PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKindDiskindDiskE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mount
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/findDisk
     ${CMAKE_CURRENT_SOURCE_DIR}/pages
     ${CMAKE_CURRENT_SOURCE_DIR}/pages/diskchosePage
     ${CMAKE_CURRENT_BINARY_DIR}

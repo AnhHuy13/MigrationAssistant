@@ -1,20 +1,33 @@
 #include "diskChoosePage.h"
+#include "findDisk.h"
 #include <QIcon>
 #include <QStandardItem>
+#include <QDebug>
 
-dcPage::dcPage(QListView* view, QObject *parent) : QObject(parent), m_view(view) {
+diskChoosePage::diskChoosePage(QListView* view, QObject *parent) : QObject(parent), m_view(view) {
+    if (!m_view) {
+        qDebug() << "m_view is null!";
+        return;
+    }
+
     m_model = new QStandardItemModel(this);
     m_view->setModel(m_model);
+
+    m_view->setViewMode(QListView::IconMode);
+    m_view->setGridSize(QSize(180, 160));
+    m_view->setIconSize(QSize(60, 60));
+    m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    connect(m_view, &QListView::clicked, this, [this](const QModelIndex &index){
+        QString path = index.data(Qt::UserRole).toString();
+        emit partitionClicked(path);
+    });
 }
 
-void dcPage::ScanPartition() {
+void diskChoosePage::ScanPartition() {
     m_model->clear();
+
     findDisk *fd = new findDisk(this);
-    m_view->setViewMode(QListView::IconMode);
-    m_view->setModel(m_model);
-    m_view->setGridSize(QSize(180,160));
-    m_view->setIconSize(QSize(60,60));
-    m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     connect(fd, &findDisk::sentPartition, this, [this](QString name, QString type, QString label, double size, QString unit, QString Winver){
         QString showString = QString("Name: %1\nLabel: %2\nSize: %3%4\nVersion: %5")

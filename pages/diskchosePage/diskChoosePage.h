@@ -4,16 +4,16 @@
 #include <QListView>
 #include <QStandardItemModel>
 #include <QListView>
-#include "findDisk.h">
 
-class dcPage : public QObject {
+class diskChoosePage : public QObject {
     Q_OBJECT
 public:
-    explicit dcPage(QListView* view, QObject *parent = nullptr);
-
+    explicit diskChoosePage(QListView* view, QObject *parent = nullptr);
     void ScanPartition();
+signals:
+    void partitionClicked(QString devicePath);
 private:
     QListView* m_view;
-    dcPage *m_dcPage;
+    diskChoosePage* m_diskChoosePage;
     QStandardItemModel* m_model;
 };

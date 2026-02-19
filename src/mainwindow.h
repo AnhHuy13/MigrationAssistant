@@ -18,11 +18,12 @@ public:
 
 private slots:
     void on_nextBtn_clicked();
+    void on_backBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
     QString getWindowsIcon(const QString& winVer, int version);
-    dcPage *m_dcPage;
+    diskChoosePage *m_diskChoosePage;
 
 signals: void sendPartition(QString name ,QString type,QString label,qulonglong size);
 };
